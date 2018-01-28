@@ -25,7 +25,7 @@ SECRET_KEY = 'i$nh6(a+3g-8@b24yx8$o(_#mp##v&d4r6k&x=_9f3%d8j&kwx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.168.13']
 
 
 # Application definition
@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # specifies the application configuration 
-     'catalog.apps.CatalogConfig',
+    'catalog.apps.CatalogConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'locallibrary.urls'
