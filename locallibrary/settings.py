@@ -25,7 +25,8 @@ SECRET_KEY = 'i$nh6(a+3g-8@b24yx8$o(_#mp##v&d4r6k&x=_9f3%d8j&kwx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.168.13' , '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.168.13' , '192.168.168.15', '127.0.0.1']
+
 
 
 # Application definition
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
 
     # specifies the application configuration 
     'catalog.apps.CatalogConfig',
+
+
 
 ]
 
@@ -59,7 +62,8 @@ ROOT_URLCONF = 'locallibrary.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # root template for account html
+        'DIRS': ['./templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,3 +127,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Redirect to home URL after login (Default redirects to /accounts/profile/)
+# LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+
+# sending email not work
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+

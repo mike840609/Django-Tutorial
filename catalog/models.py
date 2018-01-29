@@ -64,7 +64,7 @@ class Book(models.Model):
 
 
 import uuid
-
+from datetime import date
 class BookInstance(models.Model):
     """
     Model representing a specific copy of a book (i.e. that can be borrowed from the library).
@@ -96,7 +96,12 @@ class BookInstance(models.Model):
         return False
 
     class Meta:
+        # You can specify as many permissions as you need in a tuple, 
+        # each permission itself being defined in a nested tuple containing the permission name and permission display value.
+        permissions = (("can_mark_returned" , "Set book as returned"),)
+
         ordering = ['due_back']
+        
 
     def __str__(self):
         """

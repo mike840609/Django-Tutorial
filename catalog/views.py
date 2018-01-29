@@ -3,10 +3,7 @@ from django.shortcuts import render
 from .models import Book, BookInstance, Author, Genre
 
 
-
 # function base
-
-
 def index(request):
     num_books = Book.objects.all().count()
     num_instances = BookInstance.objects.all().count()
@@ -16,12 +13,14 @@ def index(request):
         status__exact='a').count()
     num_authors = Author.objects.count()
 
+    # session 
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits+1
+    request.session.set_expiry(600)
 
     # counter
     time = getTime()
-    count = getCount()
+    count = getCount(num_visits)
 
 
     return render(request,
@@ -36,16 +35,16 @@ def index(request):
 
 
 from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # class base
-
-
 class BookListView(generic.ListView):
     model = Book
     # Pagination
     # the number of items show on one page 
     paginate_by = 6
 
-
+    
     '''
     # You can add attributes to change the default behaviour above.
     # your own name for the list as a template variable
@@ -74,6 +73,19 @@ class AuthorListView(generic.ListView):
 class AuthorDetailView(generic.DetailView):
     model = Author
 
+# loging required
+class LoanedBooksByUserListView(LoginRequiredMixin ,generic.ListView):
+    model = BookInstance
+    template_name = 'catalog/bookinstance_list_borrowed_user.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+
+    
+
+
+
 
 # counter ==============================================================================================
 import time
@@ -85,16 +97,22 @@ def getTime():#获取当前时间
 
     return time.ctime()
 
-def getCount(): 
+def getCount(num_visits): 
 
     count_file_name = 'count.p'
     count = 0
 
     if  os.path.exists(count_file_name)==True:
+
         count = pk.load(open(count_file_name, 'rb'))
-        count += 1
-        pk.dump(count,open(count_file_name,'wb'))
+
+        if num_visits == 0:
+            count += 1
+            pk.dump(count,open(count_file_name,'wb'))
+
     else :
         pk.dump( count , open(count_file_name,"wb"))
+
+    count = pk.load(open(count_file_name, 'rb'))
 
     return count
