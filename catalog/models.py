@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 class Genre(models.Model):
     """
@@ -11,15 +13,12 @@ class Genre(models.Model):
         # String for representing the Model object (in Admin site etc.)
         return self.name
 
-
 class Language(models.Model):
 
     name = models.CharField(max_length=200, help_text="Enter a the book's natural language (e.g. English, French, Japanese etc.)")
     
     def __str__(self):
         return self.name
-
-
 
 
 from django.urls import reverse #Used to generate URLs by reversing the URL patterns
@@ -87,6 +86,15 @@ class BookInstance(models.Model):
 
     status = models.CharField(max_length = 1 ,choices = LOAN_STATUS , blank = True , default = "m" , help_text = 'Book availability')
 
+    borrower = models.ForeignKey(User , on_delete = models.SET_NULL , null = True , blank = True)
+
+    # is book overdue 
+    @property
+    def is_overdue(self):
+        if self.due_back and date.today() > self.due_back:
+            return True
+        return False
+
     class Meta:
         ordering = ['due_back']
 
@@ -96,8 +104,6 @@ class BookInstance(models.Model):
         """
         return '{0}({1})'.format(self.id , self.book.title)
 
-
-    
 
 class Author(models.Model):
     """
