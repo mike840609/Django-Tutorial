@@ -35,7 +35,7 @@ def index(request):
 
 
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 # class base
 class BookListView(generic.ListView):
@@ -73,7 +73,10 @@ class AuthorListView(generic.ListView):
 class AuthorDetailView(generic.DetailView):
     model = Author
 
+
 # loging required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 class LoanedBooksByUserListView(LoginRequiredMixin ,generic.ListView):
     model = BookInstance
     template_name = 'catalog/bookinstance_list_borrowed_user.html'
@@ -82,9 +85,17 @@ class LoanedBooksByUserListView(LoginRequiredMixin ,generic.ListView):
     def get_queryset(self):
         return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
 
-    
+# challenge part
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
+class LoanedBooksAllListView(PermissionRequiredMixin,generic.ListView):
+    model = BookInstance 
+    permission_required = 'catlog.can_mark_returned'
+    template_name ='catalog/bookinstance_list_borrowed_all.html'
+    paginate_by = 10
 
+    def get_queryset(self):
+        return BookInstance.objects.filter(status__exact = 'o').order_by('due_back')
 
 
 # counter ==============================================================================================
@@ -93,7 +104,7 @@ from django.template import loader,Context
 import pickle as pk
 import os.path
 
-def getTime():#获取当前时间
+def getTime():
 
     return time.ctime()
 

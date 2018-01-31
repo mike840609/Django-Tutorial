@@ -18,4 +18,5 @@ urlpatterns = [
     path('author/<int:pk>', views.AuthorDetailView.as_view(), name='author-detail'),
 
     path('mybooks/', views.LoanedBooksByUserListView.as_view(), name='my-borrowed'),
+    re_path('borrowed/', views.LoanedBooksAllListView.as_view(), name='all-borrowed'), #Added for challenge
 ]

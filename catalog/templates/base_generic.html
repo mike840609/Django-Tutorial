@@ -50,6 +50,15 @@
 
                     <li><a href="{% url 'my-borrowed' %}">My Borrowed</a></li>
                     
+                    {% if user.is_staff %}
+                    <hr />
+                    <li>Staff</li>
+                        {% if perms.catalog.can_mark_returned %}
+                        <li><a href="{% url 'all-borrowed' %}">All borrowed</a></li>
+                        {% endif %}
+                    
+                    {% endif %}
+
 
                     {% if user.is_authenticated %}
                         <div class = "top-item-buffer" >
