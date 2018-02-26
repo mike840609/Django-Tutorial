@@ -21,6 +21,7 @@ urlpatterns = [
 
     path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
     re_path(r'^borrowed/$', views.LoanedBooksAllListView.as_view(), name='all-borrowed'), #Added for challenge
+
 ]
 
 

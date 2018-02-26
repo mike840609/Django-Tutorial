@@ -35,7 +35,7 @@ def index(request):
 
 
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 # class base
 class BookListView(generic.ListView):
@@ -73,7 +73,10 @@ class AuthorListView(generic.ListView):
 class AuthorDetailView(generic.DetailView):
     model = Author
 
+
 # loging required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 class LoanedBooksByUserListView(LoginRequiredMixin ,generic.ListView):
     model = BookInstance
     template_name = 'catalog/bookinstance_list_borrowed_user.html'
@@ -164,7 +167,7 @@ from django.template import loader,Context
 import pickle as pk
 import os.path
 
-def getTime():#获取当前时间
+def getTime():
 
     return time.ctime()
 
